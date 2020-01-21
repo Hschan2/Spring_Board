@@ -12,6 +12,14 @@
 	                 		  , #{title}
 	                 		  , #{content}
 	                 		  , #{writer}  )
-   
    </insert>
+   <!-- 쿼리 실행 후 결과값을 BoardVO에 담겠다. -->
+   <select id="list" resultType="kr.co.vo.BoardVO">
+		SELECT   BNO
+			   , TITLE
+			   , WRITER
+			   , REGDATE
+		  FROM MP_BOARD
+		  ORDER BY BNO DESC
+	</select>
 </mapper>
