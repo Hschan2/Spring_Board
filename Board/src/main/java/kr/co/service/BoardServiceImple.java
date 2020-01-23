@@ -31,4 +31,16 @@ public class BoardServiceImple implements BoardService {
 	public BoardVO read(int bno) throws Exception {
 		return dao.read(bno);
 	}
+	
+	// 게시물 목록 수정, VO의 값 모두 적용
+	@Override
+	public void update(BoardVO boardVO) throws Exception {
+		dao.update(boardVO);
+	}
+
+	// 게시물 목록 삭제(ID값 넘기기)
+	@Override
+	public void delete(int bno) throws Exception {
+		dao.delete(bno);
+	}
 }
