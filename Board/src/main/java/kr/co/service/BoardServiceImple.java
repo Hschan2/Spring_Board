@@ -25,4 +25,10 @@ public class BoardServiceImple implements BoardService {
 	public List<BoardVO> list() throws Exception {
 		return dao.list(); // dao의 list() 함수를 반환한다.
 	}
+	
+	// 게시물 목록 조회, id값을 받는다
+	@Override
+	public BoardVO read(int bno) throws Exception {
+		return dao.read(bno);
+	}
 }

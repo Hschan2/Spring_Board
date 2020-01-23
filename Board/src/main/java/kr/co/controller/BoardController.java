@@ -46,7 +46,16 @@ private static final Logger logger = LoggerFactory.getLogger(BoardController.cla
 			// service.list()의 데이터를 list의 이름으로 담을 것
 			model.addAttribute("list",service.list());
 			
-			return "board/list";
+			return "board/list";	
+		}
+		
+		// 게시판 조회
+		@RequestMapping(value = "/readView", method = RequestMethod.GET)
+		public String read(BoardVO boardVO, Model model) throws Exception{
+			logger.info("read");
 			
+			model.addAttribute("read", service.read(boardVO.getBno()));
+			
+			return "board/readView";
 		}
 }

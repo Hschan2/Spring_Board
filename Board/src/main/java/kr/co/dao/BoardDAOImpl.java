@@ -14,13 +14,21 @@ public class BoardDAOImpl implements BoardDAO {
 	@Inject
 	private SqlSession sqlSession;
 	
+	// 게시글 작성
 	@Override
-	public void write(BoardVO boardVO) throws Exception { // 게시글 작성
+	public void write(BoardVO boardVO) throws Exception { 
 		sqlSession.insert("boardMapper.insert", boardVO);
 	}
 
+	// 게시글 목록 조회
 	@Override
 	public List<BoardVO> list() throws Exception {
 		return sqlSession.selectList("boardMapper.list"); // 값 반환
+	}
+	
+	// 게시물 조회
+	@Override
+	public BoardVO read(int bno) throws Exception {
+		return sqlSession.selectOne("boardMapper.read", bno);
 	}
 }
