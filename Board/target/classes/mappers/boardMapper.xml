@@ -17,14 +17,55 @@
    
    <!-- 쿼리 실행 후 결과값을 BoardVO에 담겠다. -->
    <!-- 데이터 베이스의 목록 데이터 출력-->
-   <select id="list" resultType="kr.co.vo.BoardVO">
-		SELECT   BNO
-			   , TITLE
-			   , WRITER
-			   , REGDATE
-		  FROM MP_BOARD
-		  ORDER BY BNO DESC
+   <select id="listPage" resultType="kr.co.vo.BoardVO" parameterType="kr.co.vo.SearchCriteria">
+		SELECT  BNO, 
+		        TITLE, 
+		        CONTENT,
+		        WRITER, 
+		        REGDATE
+		 FROM ( 
+		        SELECT BNO, 
+		               TITLE, 
+		               CONTENT, 
+		               WRITER, 
+		               REGDATE, 
+		               ROW_NUMBER() OVER(ORDER BY BNO DESC) AS RNUM
+		         FROM MP_BOARD
+		         WHERE 1=1 
+		         	<include refid="search"></include>
+		                       ) MP
+		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY BNO DESC
 	</select>
+	
+	<select id="listCount" parameterType="kr.co.vo.SearchCriteria" resultType="int">
+		SELECT COUNT(BNO)
+		   FROM MP_BOARD
+		   WHERE 1=1
+		<include refid="search"></include>	
+		   AND BNO > 0
+	</select>
+	
+	<!-- 게시물 총 갯수 -->
+	<select id="listCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(BNO)
+		  FROM MP_BOARD
+		  WHERE 1=1
+		<include refid="search"></include>	
+		  AND BNO > 0
+	]]>
+	</select>
+	
+	<!-- 검색할 때 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'tc'.toString()">AND (TITLE LIKE '%' || #{keyword} || '%') or (CONTENT LIKE '%' || #{keyword} || '%')</if>
+		</if>
+	</sql>
 	
 	<!-- 데이터 베이스에 있는 데이터를 읽기 페이지에 데이터 출력-->
 	<select id="read" parameterType="int" resultType="kr.co.vo.BoardVO">

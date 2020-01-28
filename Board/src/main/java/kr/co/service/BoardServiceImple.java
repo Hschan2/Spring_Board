@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import kr.co.dao.BoardDAO;
 import kr.co.vo.BoardVO;
+import kr.co.vo.Criteria;
+import kr.co.vo.SearchCriteria;
 
 @Service
 public class BoardServiceImple implements BoardService {
@@ -22,8 +24,14 @@ public class BoardServiceImple implements BoardService {
 
 	// 게시글 목록
 	@Override
-	public List<BoardVO> list() throws Exception {
-		return dao.list(); // dao의 list() 함수를 반환한다.
+	public List<BoardVO> list(SearchCriteria scri) throws Exception {
+		return dao.list(scri); // dao의 list() 함수를 반환한다.
+	}
+	
+	// 게시물 갯수
+	@Override
+	public int listCount(SearchCriteria scri) throws Exception {
+		return dao.listCount(scri); // 값 반환
 	}
 	
 	// 게시물 목록 조회, id값을 받는다
