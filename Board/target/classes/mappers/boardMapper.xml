@@ -38,23 +38,13 @@
 		ORDER BY BNO DESC
 	</select>
 	
+	<!-- 게시물 총 갯수 -->
 	<select id="listCount" parameterType="kr.co.vo.SearchCriteria" resultType="int">
 		SELECT COUNT(BNO)
 		   FROM MP_BOARD
 		   WHERE 1=1
 		<include refid="search"></include>	
 		   AND BNO > 0
-	</select>
-	
-	<!-- 게시물 총 갯수 -->
-	<select id="listCount" resultType="int">
-	<![CDATA[
-		SELECT COUNT(BNO)
-		  FROM MP_BOARD
-		  WHERE 1=1
-		<include refid="search"></include>	
-		  AND BNO > 0
-	]]>
 	</select>
 	
 	<!-- 검색할 때 -->
