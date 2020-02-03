@@ -4,12 +4,15 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardMapper">
 	<!-- 데이터 베이스에 데이터 삽입-->
-   <insert id="insert">
+   <insert id="insert" parameterType="kr.co.vo.BoardVO" useGeneratedKeys="true" keyProperty="bno">
+	   <selectKey keyProperty="bno" resultType="int" order="BEFORE">
+	    	SELECT MP_BOARD_SEQ.NEXTVAL FROM DUAL
+	    </selectKey>
 	   INSERT INTO MP_BOARD(    BNO 
 	   					      , TITLE 
 	   					      , CONTENT 
 	   					      , WRITER  )
-	                 VALUES(    MP_BOARD_SEQ.NEXTVAL 
+	                 VALUES(    #{bno}
 	                 		  , #{title}
 	                 		  , #{content}
 	                 		  , #{writer}  )
@@ -82,4 +85,20 @@
 		  FROM MP_BOARD
 		 WHERE BNO = #{bno}
 	</delete>
+	
+	<insert id="insertFile" parameterType="hashMap">
+		INSERT INTO MP_FILE(
+			FILE_NO,
+			BNO,
+			ORG_FILE_NAME,
+			STORED_FILE_NAME,
+			FILE_SIZE
+		)VALUES(
+			SEQ_MP_FILE_NO.NEXTVAL,
+			#{BNO},
+			#{ORG_FILE_NAME},
+			#{STORED_FILE_NAME},
+			#{FILE_SIZE}
+		)
+    </insert>
 </mapper>

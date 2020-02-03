@@ -178,7 +178,41 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.10.0</version>
 		</dependency>   
+	
+	<!-- 비밀번호 암호화를 위해 -->
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-core</artifactId>
+	    <version>5.0.8.RELEASE</version>
+	</dependency>
+			
+	<!-- 비밀번호 암호화를 위해 -->
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-web</artifactId>
+	    <version>5.0.8.RELEASE</version>
+	</dependency>
+	
+	<!-- 비밀번호 암호화를 위해 -->
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-config</artifactId>
+	    <version>5.0.8.RELEASE</version>
+	</dependency>
 		   
+	<!-- 첨부파일를 위해 -->
+	 <dependency>
+		 <groupId>commons-io</groupId>
+		 <artifactId>commons-io</artifactId>
+		 <version>2.0.1</version>
+	 </dependency>
+	 <!-- 첨부파일를 위해 -->
+	 <dependency>
+		 <groupId>commons-fileupload</groupId>
+		 <artifactId>commons-fileupload</artifactId>
+		 <version>1.2.2</version>
+	 </dependency>
+			   
 	</dependencies>
     <build>
         <plugins>
