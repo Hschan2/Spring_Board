@@ -28,4 +28,16 @@ public interface BoardDAO {
 	
 	// 첨부파일 업로드
 	public void insertFile(Map<String, Object> map) throws Exception;
+	
+	// 첨부파일 조회, List 배열로 하나 이상의 파일을 조회, bno로 조회한 값의 파일
+	public List<Map<String, Object>> selectFileList(int bno) throws Exception;
+
+	// 첨부파일 다운
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception;
+	
+	// 첨부파일 수정
+	public void updateFile(Map<String, Object> map) throws Exception;
+	
+	// 게시판 조회수
+	public void boardHit(int bno) throws Exception;
 }

@@ -25,13 +25,15 @@
 		        TITLE, 
 		        CONTENT,
 		        WRITER, 
-		        REGDATE
+		        REGDATE,
+		        HIT
 		 FROM ( 
 		        SELECT BNO, 
 		               TITLE, 
 		               CONTENT, 
 		               WRITER, 
 		               REGDATE, 
+		               HIT,
 		               ROW_NUMBER() OVER(ORDER BY BNO DESC) AS RNUM
 		         FROM MP_BOARD
 		         WHERE 1=1 
@@ -86,6 +88,7 @@
 		 WHERE BNO = #{bno}
 	</delete>
 	
+	<!-- 첨부파일 추가 -->
 	<insert id="insertFile" parameterType="hashMap">
 		INSERT INTO MP_FILE(
 			FILE_NO,
@@ -101,4 +104,39 @@
 			#{FILE_SIZE}
 		)
     </insert>
+    
+    <!-- 첨부파일 조회, 조회된 bno의 첨부파일이 출력, 1024의 파일크기를 1024로 나눠 1로 -->
+	<select id="selectFileList" parameterType="int" resultType="hashMap">
+		SELECT FILE_NO,
+			   ORG_FILE_NAME,
+			   ROUND(FILE_SIZE/1024,1) AS FILE_SIZE,
+			   DEL_GB
+		  FROM MP_FILE
+		 WHERE BNO = #{BNO}
+		   AND DEL_GB = 'N'
+		   ORDER BY FILE_NO ASC
+	</select>
+	
+	<!-- 첨부파일 다운 -->
+	<select id="selectFileInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT 
+			STORED_FILE_NAME,
+			ORG_FILE_NAME
+		FROM MP_FILE
+		WHERE FILE_NO = #{FILE_NO}
+	</select>
+	
+	<!-- 첨부파일 수정, 삭제한 파일은 DEL_GB을 Y로 즉 데이터에서 삭제가 아닌 hidden으로 설정 -->
+	<update id="updateFile" parameterType="hashMap">
+    	UPDATE MP_FILE SET
+    	DEL_GB = 'Y'
+    	WHERE FILE_NO = #{FILE_NO}
+    </update>
+    
+    <!-- 게시판 조회수 -->
+    <update id="boardHit" parameterType="int">
+    	UPDATE MP_BOARD SET
+    	HIT = HIT+1
+    	WHERE BNO = #{bno}
+    </update>
 </mapper>
