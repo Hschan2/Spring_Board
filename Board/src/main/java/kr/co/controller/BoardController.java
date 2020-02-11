@@ -27,41 +27,45 @@ import kr.co.vo.PageMaker;
 import kr.co.vo.ReplyVO;
 import kr.co.vo.SearchCriteria;
 
+// @Controller => client의 request가 서버에 도착했을 때 어떻게 처리
+// @RequestMapping => 사용자 요청을 Controller가 가져와 실행
 @Controller
 @RequestMapping("/board/*") // board의 모든 것을 가져와라
 public class BoardController {
-	// 출력할 메시지
+// 출력할 메시지, Logger => 파일로 저장된 로그를 분석해서 가져오기 위해, ex)툴 = log4j
 private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-	
+	// Inject => 해당 타입의 객체를 찾아 자동으로 할당. BoardService, ReplyService의 객체를 자동으로 할당
 	@Inject
 	BoardService service;
 	
 	@Inject
 	ReplyService replyService;
 	
-	// 게시판 글 작성 화면
+	// 게시판 글 작성 화면, get은 화면으로 이동
 	@RequestMapping(value = "/board/writeView", method = RequestMethod.GET)
 	public void writeView() throws Exception{
 		logger.info("writeView"); // 글쓰기 화면 출력
 	}
 	
-	// 게시판 글 작성
+	// 게시판 글 작성, post는 데이터를 전송
 	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
 	public String write(BoardVO boardVO, MultipartHttpServletRequest mpRequest) throws Exception{
 		logger.info("write"); // 글 작성 출력
-		
+		// service에 값을 저장
 		service.write(boardVO, mpRequest);
-		
+		// 글쓰기 완료하면 목록으로 이동
 		return "redirect:/borad/list";
 	}
 	
 	// 게시판 목록 조회
+	// SearchCriteria => 검색 타입을 속성으로 가지고 있다.
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model, @ModelAttribute("scri") SearchCriteria scri) throws Exception{
 		logger.info("list");
-		
+		// 리스트에 값을 전달
 		model.addAttribute("list", service.list(scri));
 		
+		// 목록 페이지 숫자
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(scri);
 		pageMaker.setTotalCount(service.listCount(scri));
@@ -80,6 +84,7 @@ private static final Logger logger = LoggerFactory.getLogger(BoardController.cla
 			model.addAttribute("read", service.read(boardVO.getBno()));
 			model.addAttribute("scri", scri);
 			
+			// 댓글 목록, 댓글은 여러개의 개수를 가지고 있기 때문에 배열로
 			List<ReplyVO> replyList = replyService.readReply(boardVO.getBno());
 			model.addAttribute("replyList", replyList);
 			
@@ -97,13 +102,14 @@ private static final Logger logger = LoggerFactory.getLogger(BoardController.cla
 			model.addAttribute("update", service.read(boardVO.getBno()));
 			model.addAttribute("scri", scri);
 
-			// 페이지에 파일목록을 보이게 해준다.
+			// 페이지에 파일목록을 보이게 해준다. 파일은 여러개이기 때문에
 			List<Map<String, Object>> fileList = service.selectFileList(boardVO.getBno());
 			model.addAttribute("file", fileList);
 			return "board/updateView";
 		}
 
 		// 게시판 수정
+		// RedirectAttributes => 데이터를 전달할 때 get방식은 url에 노출되는 단점을 노출되지 않게 전달
 		@RequestMapping(value = "/update", method = RequestMethod.POST)
 		public String update(BoardVO boardVO, 
 							 @ModelAttribute("scri") SearchCriteria scri, 
