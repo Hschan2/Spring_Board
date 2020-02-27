@@ -32,17 +32,18 @@
 <body>
 	<form name='homeForm' method="post" action="/member/login">
 		<c:if test="${member == null}">
-			<div>
+			<div style="witdh:150px;">
 				<label for="userId"></label>
-				<input type="text" id="userId" name="userId">
+				<input type="text" id="userId" name="userId" placeholder="아이디" class="form-control">
 			</div>
 			<div>
 				<label for="userPass"></label>
-				<input type="password" id="userPass" name="userPass">
+				<input type="password" id="userPass" name="userPass" placeholder="비밀번호" class="form-control">
 			</div>
+			<br>
 			<div>
-				<button type="submit">로그인</button>
-				<button id="registerBtn" type="button">회원가입</button>
+				<button type="submit" class="btn btn-default">로그인</button>
+				<button id="registerBtn" type="button" class="btn btn-default">회원가입</button>
 			</div>
 		</c:if>
 		<c:if test="${member != null }">
